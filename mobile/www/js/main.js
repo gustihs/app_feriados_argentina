@@ -59,6 +59,8 @@ MainView = Backbone.View.extend({
 	getTipos: function(callback){
 		doRequest('titulos').success(function(titulos){
 			callback(titulos);
+		}).error(function(error){
+			console.log(error);
 		});
 	}
 
