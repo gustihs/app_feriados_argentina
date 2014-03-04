@@ -2,8 +2,6 @@ var Cheerio = require('cheerio');
 var Request = require('request');
 var database = require('../server/database');
 
-var year = 2014;
-var url = 'http://www.mininterior.gov.ar/asuntos_politicos_y_alectorales/dinap/feriados/feriados'+year+'.php';
 
 function traducirFecha(fecha){
 
@@ -14,17 +12,21 @@ function traducirFecha(fecha){
 
 database.schema('prod');
 
-sequelize.sync().success(function(){
+sequelize.sync().success(function(){	
 
-	empezarScrapping(function(feriados){
-		guardarTipos(feriados);
-		Feriados.destroy().success(function(){
-			guardarFeriados(feriados);
-		});		
-	});
+	for(var anio = 2010; anio <= 2016; anio++){
+
+		empezarScrapping(anio, function(anio, feriados){
+			guardarTipos(feriados);
+			Feriados.destroy({anio: anio }).success(function(){
+				guardarFeriados(anio, feriados);				
+			});		
+		});
+	}
+
 });
 
-function guardarFeriados(feriados){	
+function guardarFeriados(year, feriados){	
 
 	for(var index in feriados){
 		var feriado = feriados[index];
@@ -62,7 +64,9 @@ function guardarTipos(feriados){
 	}
 }
 
-function empezarScrapping(callback){
+function empezarScrapping(anio, callback){
+
+	var url = 'http://www.mininterior.gov.ar/asuntos_politicos_y_alectorales/dinap/feriados/feriados'+anio+'.php';
 	
 	Request(url, function(error, response, body_response){
 		if(error) throw error;
@@ -101,6 +105,6 @@ function empezarScrapping(callback){
 			});
 		});
 
-		callback(feriados);
+		callback(anio, feriados);
 	});
 }

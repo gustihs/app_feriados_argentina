@@ -21,3 +21,17 @@ p.agradecimiento{
     font-size: 12px;
     text-align: center;
 }
+
+.ui-header #cambiar_anio-button{
+    width: 60%;
+    height: 25px;
+    font-size: 20px;
+}
+
+.ui-header .ui-select{
+    text-align: center;
+}
+
+.mensaje_error{
+    display: none;
+}

@@ -3,10 +3,9 @@ FeriadoListadoView = Backbone.View.extend({
 
 	el: '#main_content',
 
-	initialize: function(titulo){
+	initialize: function(titulo, year){
 		titulo = titulo.titulo;
 		this.collection = new Backbone.Collection;
-		var year = 2014;
 		var self = this;
 		this.collection.url = getServerUrl('feriados/'+titulo.id+'/'+ year);
 
@@ -23,11 +22,6 @@ FeriadoListadoView = Backbone.View.extend({
 
 		this.tpl = '<h3 class="titular">'+titulo.descripcion+'</h3>';	
 		this.tpl += '<div id="titulo_'+titulo.id+'"></div>';
-		// this.tpl += '<table data-role="table" data-mode="reflow"><thead><th><tr>';
-		// this.tpl += '<th>Fecha</th>';
-		// this.tpl += '<th>Día</th>';
-		// this.tpl += '<th>Conmemoración</th>';
-		// this.tpl += '</tr></thead><tbody></tbody></table>';
 
 		return this;
 	},
@@ -43,15 +37,23 @@ MainView = Backbone.View.extend({
 
 	el: '#main_content',
 
-	initialize: function(){
-		return this;
-	},
-	render: function(){
+	initialize: function(){		
 		var self = this;
+
+		$('#cambiar_anio').on('change', function(){
+			self.render($(this).val());
+		});
+
+		return this;
+
+	},
+	render: function(year){
+		var self = this;
+		self.$el.html('');
 
 		this.getTipos(function(titulos){
 			for(var index in titulos){
-				var view = new FeriadoListadoView({ titulo: titulos[index] });
+				var view = new FeriadoListadoView({ titulo: titulos[index] }, year);
 				self.$el.append(view.render());
 			}			
 		});
@@ -98,6 +100,6 @@ $(document).ready(function(){
 		App.server_ip = '127.0.0.1:5000';
 	}	
 
-	new MainView().render();
+	new MainView().render($('#cambiar_anio').val());
 
 });
