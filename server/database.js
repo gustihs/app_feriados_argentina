@@ -41,4 +41,6 @@ exports.schema = function(env){
 	TiposFeriados.hasMany(Feriados, { as: 'Feriados'} );
 	Feriados.belongsTo(TiposFeriados);
 
+	sequelize.sync();
+
 }
