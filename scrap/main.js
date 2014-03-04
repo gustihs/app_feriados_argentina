@@ -12,7 +12,7 @@ function traducirFecha(fecha){
 	return fecha;
 }
 
-database.schema();
+database.schema('prod');
 
 sequelize.sync().success(function(){
 

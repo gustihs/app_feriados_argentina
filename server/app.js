@@ -28,7 +28,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-database.schema();
+database.schema(app.get('env'));
 
 app.all('/feriados/:tipo/:year', routes.listarFeriados);
 app.all('/titulos', routes.listarTitulos);
