@@ -1,6 +1,8 @@
 
 FeriadoListadoView = Backbone.View.extend({
 
+	el: '#main_content',
+
 	initialize: function(titulo){
 		titulo = titulo.titulo;
 		this.collection = new Backbone.Collection;
@@ -9,28 +11,29 @@ FeriadoListadoView = Backbone.View.extend({
 		this.collection.url = getServerUrl('feriados/'+titulo.id+'/'+ year);
 
 		this.collection.on('add', function(model, collection){
-			var row = '<tr>';
-			row += '<td>'+model.get('fecha')+'</td>';
-			row += '<td>'+model.get('dia')+'</td>';
-			row += '<td>'+model.get('conmemoracion')+'</td>';
-			row += '</tr>';
-			self.$el.find('tbody').append(row);
+			var row = '<ul class="lista_feriados" data-role="listview" id="lista_'+model.get('id')+'">';
+			row += '<li>'+model.get('fecha')+'</li>';
+			row += '<li>'+model.get('dia')+'</li>';
+			row += '<li>'+model.get('conmemoracion')+'</li>';
+			row += '</ul>';
+
+			$('#titulo_'+titulo.id).append(row);
+			$('#lista_'+model.get('id')).listview();
 		});
 
-		this.tpl = '<h3>'+titulo.descripcion+'</h3>';		
-		this.tpl += '<table data-role="table" data-mode="reflow"><thead><th><tr>';
-		this.tpl += '<th>Fecha</th>';
-		this.tpl += '<th>Día</th>';
-		this.tpl += '<th>Conmemoración</th>';
-		this.tpl += '</tr></thead><tbody></tbody></table>';
+		this.tpl = '<h3 class="titular">'+titulo.descripcion+'</h3>';	
+		this.tpl += '<div id="titulo_'+titulo.id+'"></div>';
+		// this.tpl += '<table data-role="table" data-mode="reflow"><thead><th><tr>';
+		// this.tpl += '<th>Fecha</th>';
+		// this.tpl += '<th>Día</th>';
+		// this.tpl += '<th>Conmemoración</th>';
+		// this.tpl += '</tr></thead><tbody></tbody></table>';
 
 		return this;
 	},
-	render: function(){
-		this.$el.html(this.tpl);
-		this.$el.find('table').table();
+	render: function(){		
 		this.collection.fetch({dataType: 'jsonp'});
-		return this;
+		return this.tpl;
 	}
 
 });
@@ -49,7 +52,7 @@ MainView = Backbone.View.extend({
 		this.getTipos(function(titulos){
 			for(var index in titulos){
 				var view = new FeriadoListadoView({ titulo: titulos[index] });
-				self.$el.append(view.render().$el);
+				self.$el.append(view.render());
 			}			
 		});
 	},
