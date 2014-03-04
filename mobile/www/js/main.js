@@ -88,7 +88,13 @@ function doRequest(url, parameters, method){
 $(document).ready(function(){
 
 	App = {};
-	App.server_ip = '127.0.0.1:5000';
+	var env = 'prod';
+
+	if(env == 'prod'){
+		App.server_ip = '54.201.7.254';
+	}else{
+		App.server_ip = '127.0.0.1:5000';
+	}	
 
 	new MainView().render();
 
