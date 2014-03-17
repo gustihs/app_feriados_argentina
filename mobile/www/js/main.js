@@ -95,7 +95,7 @@ $(document).ready(function(){
 	var env = 'prod';
 
 	if(env == 'prod'){
-		App.server_ip = '54.201.7.254';
+		App.server_ip = 'feriados.hiscli.com.ar';
 	}else{
 		App.server_ip = '127.0.0.1:5000';
 	}	
