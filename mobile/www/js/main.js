@@ -91,6 +91,8 @@ function doRequest(url, parameters, method){
 
 $(document).ready(function(){
 
+	$.mobile.allowCrossDomainPages = true;
+
 	App = {};
 	var env = 'prod';
 
